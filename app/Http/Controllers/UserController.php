@@ -18,16 +18,10 @@ class UserController extends Controller
     {
     	$user = Auth::user();
 
-        if($user->is_super_admin || $user->is_admin){
-            $details = UserAdmin::where('user_type_id', '=', $user->user_type_id)->first();
-        }else{
-            
-        }
-
     	return view('dashboard/profile', ['user' => $user]);
     }
 
-
+    /*
     public function changeProfilePhoto(Request $request)
     {
     	$user = Auth::user();
@@ -134,4 +128,6 @@ class UserController extends Controller
         }
 
     }
+    */
 }
+

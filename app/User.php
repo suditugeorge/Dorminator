@@ -14,6 +14,12 @@ class User extends Authenticatable
      *
      * @var array
      */
+
+    public function contact()
+    {
+        return $this->hasOne(Contact::class);
+    }
+
     protected $fillable = [
         'name', 'email', 'password',
     ];

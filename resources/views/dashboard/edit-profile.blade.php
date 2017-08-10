@@ -12,14 +12,14 @@
         @if($user->is_super_admin || $user->is_admin)
             <div class="col-md-6">
                 <div class="md-form">
-                    <input type="text" id="name" class="form-control validate" value="{{$user->name}}">
+                    <input type="text" id="name" class="form-control validate" value="{{$user->contact->first_name}}">
                     <label for="name">Nume</label>
                 </div>
             </div>
         @else
             <div class="col-md-6">
                     <div class="md-form">
-                        <input type="text" id="name" class="form-control validate" value="{{$user->name}}" disabled>
+                        <input type="text" id="name" class="form-control validate" value="{{$user->contact->first_name}}" disabled>
                         <label for="name" class="disabled">Nume</label>
                     </div>
             </div>

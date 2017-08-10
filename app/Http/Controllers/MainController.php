@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Contact;
 use App\User;
 use App\UserAdmin;
 use Illuminate\Http\Request;
@@ -41,6 +42,13 @@ class MainController extends Controller
                     'field' => 'username',
                 ]);
             }elseif(Auth::attempt(['username' => $username, 'password' => $password], $remember)){
+                $user = Auth::user();
+                if($user->has_temp_password){
+                    return response()->json([
+                        'success' => false,
+                        'url' => 'change-password',
+                    ]);
+                }
                 return response()->json([
                     'success' => true,
                 ]); 
@@ -86,20 +94,24 @@ class MainController extends Controller
     {
 
         DB::transaction(function () {
-            $userAdmin = new UserAdmin();
+            $userAdmin = new User();
             $userAdmin->email = 'suditugeorge94@gmail.com';
-            $userAdmin->user_type_name = 'Super Administrator';
+            $userAdmin->username = 'root-dorminator';
+            $userAdmin->has_temp_password = False;
+            $userAdmin->password = Hash::make("MulteCarti");
+            $userAdmin->is_admin = False;
+            $userAdmin->is_super_admin = True;
             $userAdmin->save();
 
-            $user = new User();
-            $user->user_type_id = $userAdmin->user_type_id;
-            $user->username = 'root-dorminator';
-            $user->password = Hash::make("rootdorminator");
-            $user->has_temp_password = false;
-            $user->is_super_admin = true;
-            $user->is_admin = false;
-            $user->is_normal_user = false;
-            $user->save();
+            $contact = new Contact();
+            $contact->first_name = 'George';
+            $contact->last_name = 'Suditu';
+            $contact->grade = 10.00;
+            $contact->cnp = '1940405100136';
+            $contact->phone = '0755823880';
+            $contact->sex = 'M';
+
+            $userAdmin->contact()->save($contact);
 
         });
     }

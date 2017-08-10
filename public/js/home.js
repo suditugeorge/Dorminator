@@ -32,15 +32,19 @@
       remember: remember
     }, function(json) {
       if (!json.success) {
+        if (typeof json.url !== void 0) {
+          window.location.href = json.url;
+          return;
+        }
         if (typeof json.field !== 'undefined') {
           $('#' + json.field).addClass('invalid');
         }
         toastr.error(json.message);
-        return;
       } else {
-        window.location.href = "/dashboard";
+        return window.location.href = "/dashboard";
       }
     });
+    return;
   });
 
 }).call(this);
