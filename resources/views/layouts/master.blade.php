@@ -12,17 +12,17 @@
 		<link rel="stylesheet" href="{{ URL::asset('css/layout/toastr.css') }}" />
 		
 		@yield('styles')
-		<script src='https://www.google.com/recaptcha/api.js'></script>
-	</head>
+		{{--<script src='https://www.google.com/recaptcha/api.js'></script> --}}
+</head>
 
-	<body class="fixed-sn white-skin">
-		<input type="hidden" name="_token" value="{{Session::token()}}">
-		@yield('content')
-		<script type="text/javascript" src="{{ URL::asset('js/layout/jquery-3.1.1.min.js') }}"></script>
-		<script type="text/javascript" src="{{ URL::asset('js/layout/tether.min.js') }}"></script>
-		<script type="text/javascript" src="{{ URL::asset('js/layout/bootstrap.min.js') }}"></script>
-		<script type="text/javascript" src="{{ URL::asset('js/layout/mdb.min.js') }}"></script>
-		<script type="text/javascript" src="{{ URL::asset('js/layout/toastr.js') }}"></script>
-		@yield('scripts')
-	</body>
+<body class="fixed-sn white-skin">
+<input type="hidden" name="_token" value="{{Session::token()}}">
+@yield('content')
+<script type="text/javascript" src="{{ URL::asset('js/layout/jquery-3.1.1.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/layout/tether.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/layout/bootstrap.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/layout/mdb.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/layout/toastr.js') }}"></script>
+@yield('scripts')
+</body>
 </html>

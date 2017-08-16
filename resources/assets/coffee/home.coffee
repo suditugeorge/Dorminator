@@ -23,7 +23,7 @@ $('#login').click (e) ->
     return
   $.post '/login', {_token: token, username: username, password: password, remember: remember}, (json) ->
       if !json.success
-        if typeof json.url != undefined
+        if typeof json.url != 'undefined'
           window.location.href = json.url
           return
         if typeof json.field != 'undefined'
@@ -31,6 +31,6 @@ $('#login').click (e) ->
         toastr.error(json.message)
         return
       else
-        window.location.href = "/dashboard"
+        window.location.href = "/profile"
     return
   return

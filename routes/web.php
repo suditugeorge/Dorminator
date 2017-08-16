@@ -35,7 +35,7 @@ Route::post('/admin-sign-up', [
 //For these routes all the users must be logged in
 Route::group(['middleware' => 'isLogedIn'], function () {
 
-    Route::get('/dashboard', [
+    Route::get('/profile', [
         'uses' => 'UserController@dashboard',
         'as' => 'dashboard',
     ]);

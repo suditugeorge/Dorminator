@@ -21,7 +21,6 @@ class UserController extends Controller
     	return view('dashboard/profile', ['user' => $user]);
     }
 
-    /*
     public function changeProfilePhoto(Request $request)
     {
     	$user = Auth::user();
@@ -51,13 +50,15 @@ class UserController extends Controller
     public function updateProfile(Request $request)
     {
         try{
-            $user = Auth::user();
+            $validator = Validator::make(['email' => $request['email'], 'phone' => $request['phone']], ['email' => 'required|email|max:255|unique:users', 'phone' => 'required']);
 
-            $user->name = $request['name'];
-            $user->degree = $request['degree'];
-            $user->year_of_study = $request['year_of_study'];
-            $user->gender = $request['gender'];
-            $user->update();
+            if (!$validator->fails()) {
+                $user = Auth::user();
+                $user->email = $request['email'];
+                $user->contact->phone = $request['phone'];
+                $user->update();
+                $user->contact->update();
+            }
         }catch(\Exception $e){
             return response()->json([
                 'success' => false,
@@ -128,6 +129,5 @@ class UserController extends Controller
         }
 
     }
-    */
 }
 

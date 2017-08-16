@@ -4,26 +4,17 @@
         <!--First column-->
         <div class="col-md-6">
             <div class="md-form">
-                <input type="email" id="email" class="form-control" disabled value="{{$user->email}}">
+                <input type="email" id="email" class="form-control" value="{{$user->email}}">
                 <label for="email" class="disabled">Adresă email</label>
             </div>
         </div>
         <!--Second column-->
-        @if($user->is_super_admin || $user->is_admin)
-            <div class="col-md-6">
+        <div class="col-md-6">
                 <div class="md-form">
-                    <input type="text" id="name" class="form-control validate" value="{{$user->contact->first_name}}">
-                    <label for="name">Nume</label>
+                    <input type="text" id="name" class="form-control validate" value="{{$user->contact->last_name}} {{$user->contact->first_name}}" disabled>
+                    <label for="name" class="disabled">Nume</label>
                 </div>
-            </div>
-        @else
-            <div class="col-md-6">
-                    <div class="md-form">
-                        <input type="text" id="name" class="form-control validate" value="{{$user->contact->first_name}}" disabled>
-                        <label for="name" class="disabled">Nume</label>
-                    </div>
-            </div>
-        @endif
+        </div>
     </div>
     <!--/.Second row-->
     <!--Second row-->
@@ -44,13 +35,13 @@
         </div>
         <div class="col-md-6">
             <div class="md-form">
-                <input type="text" id="phone" class="form-control" disabled value="{{$user->phone}}">
+                <input type="text" id="phone" class="form-control" value="{{$user->contact->phone}}">
                 <label for="phone">Telefon</label>
             </div>
         </div>
     </div>
     <!--/.Second row-->
-
+    {{--
     <div class="row">
         @if($user->is_super_admin || $user->is_admin)
             <div class="col-md-6">
@@ -151,67 +142,37 @@
             </div>
         @endif
     </div>
+    --}}
     <div class="row">
-        @if($user->is_super_admin || $user->is_admin)
-            @if($user->gender == "Male")
-                <div class="col-md-6">
-                <fieldset class="form-group">
-                    <input name="gender" type="radio" id="Male" checked="checked">
-                    <label for="Male">Sex M.</label>
-                </fieldset>
-                </div>
-                <div class="col-md-6">
-                <fieldset class="form-group">
-                    <input name="gender" type="radio" id="Female">
-                    <label for="Female">Sex F.</label>
-                </fieldset>
-                </div>
-            @else
-                <div class="col-md-6">
-                    <fieldset class="form-group">
-                        <input name="gender" type="radio" id="Male">
-                        <label for="Male">Sex M.</label>
-                    </fieldset>
-                    </div>
-                    <div class="col-md-6">
-                    <fieldset class="form-group">
-                        <input name="gender" type="radio" id="Female" checked="checked">
-                        <label for="Female">Sex F.</label>
-                    </fieldset>
-                </div>
-            @endif
+        @if($user->contact->sex == "M")
+            <div class="col-md-6">
+            <fieldset class="form-group">
+                <input name="gender" type="radio" id="M" checked="checked" disabled>
+                <label for="Male" class="disabled">Sex M.</label>
+            </fieldset>
+            </div>
+            <div class="col-md-6">
+            <fieldset class="form-group">
+                <input name="gender" type="radio" id="F" disabled>
+                <label for="Female" class="disabled">Sex F.</label>
+            </fieldset>
+            </div>
         @else
-            @if($user->gender == "Male")
-                <div class="col-md-6">
+            <div class="col-md-6">
                 <fieldset class="form-group">
-                    <input name="gender" type="radio" id="Male" checked="checked" disabled>
+                    <input name="gender" type="radio" id="M" disabled>
                     <label for="Male" class="disabled">Sex M.</label>
                 </fieldset>
                 </div>
                 <div class="col-md-6">
                 <fieldset class="form-group">
-                    <input name="gender" type="radio" id="Female" disabled>
+                    <input name="gender" type="radio" id="F" checked="checked" disabled>
                     <label for="Female" class="disabled">Sex F.</label>
                 </fieldset>
-                </div>
-            @else
-                <div class="col-md-6">
-                    <fieldset class="form-group">
-                        <input name="gender" type="radio" id="Male" disabled>
-                        <label for="Male" class="disabled">Sex M.</label>
-                    </fieldset>
-                    </div>
-                    <div class="col-md-6">
-                    <fieldset class="form-group">
-                        <input name="gender" type="radio" id="Female" checked="checked" disabled>
-                        <label for="Female" class="disabled">Sex F.</label>
-                    </fieldset>
-                </div>
-            @endif 
-        @endif                                                           
+            </div>
+        @endif
     </div>
 
-    @if($user->is_super_admin || $user->is_admin)
     <!-- Fourth row -->
     <div class="row">
         <div class="col-md-12 text-center">
@@ -219,12 +180,6 @@
         </div>
     </div>
     <!-- /.Fourth row -->
-    @endif
-
-  <div class="row danger-color hidden" id="error-box-profile">
-    <div class="col-md-12 text-center">
-    <i class="fa fa-warning fa-3x mt-1"></i><p class="text-center font-weight-bold" id="error-message-profile">Unul sau mai multe câmpuri marcate cu roșu conțin erori</p></div></div>
-  </div>
 
 </form>
 <!-- Edit Form -->

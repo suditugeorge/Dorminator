@@ -17,6 +17,5 @@ elixir(mix => {
 	 mix.sass("home.scss")
 	 	.coffee("home.coffee")
 	 	.coffee("profile.coffee")
-	 	.coffee("users-admin.coffee")
-	 	.coffee("admin-signup.coffee");
+	 	.coffee("users-admin.coffee");
 });

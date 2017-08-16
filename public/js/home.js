@@ -32,7 +32,7 @@
       remember: remember
     }, function(json) {
       if (!json.success) {
-        if (typeof json.url !== void 0) {
+        if (typeof json.url !== 'undefined') {
           window.location.href = json.url;
           return;
         }
@@ -41,7 +41,7 @@
         }
         toastr.error(json.message);
       } else {
-        return window.location.href = "/dashboard";
+        return window.location.href = "/profile";
       }
     });
     return;

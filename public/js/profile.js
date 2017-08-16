@@ -2,33 +2,37 @@
   $(function() {});
 
   $('#change-user-profile').click(function(e) {
-    var degree, email, gender, name, phone, token, year_of_study;
+    var email, emailRegex, formHasErrors, name, phone, phoneRegex, sex, token;
     e.preventDefault();
     $('#error-box-profile').addClass('hidden');
     email = $('#email').val();
     token = $('[name="_token"]').val();
     name = $('#name').val();
-    degree = $('#degree').val();
-    year_of_study = $('#year-of-study').val();
     phone = $('#phone').val();
-    gender = $('input[name=gender]:checked').attr('id');
-    if (name.trim() === "") {
-      $('#name').addClass('invalid');
-      $('#error-box').removeClass('hidden');
+    sex = $('input[name=gender]:checked').attr('id');
+    formHasErrors = false;
+    emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (!emailRegex.test(email)) {
+      $('#email').addClass('invalid');
+      formHasErrors = true;
+    }
+    phoneRegex = /^[0-9]+$/;
+    if (!phoneRegex.test(phone)) {
+      $('#phone').addClass('invalid');
+      formHasErrors = true;
+    }
+    if (formHasErrors) {
+      toastr.error("Unul sau mai multe câmpuri sunt goale sau conțin erori!");
       return;
     }
     $.post('/change-user-profile', {
       _token: token,
       email: email,
-      name: name,
-      degree: degree,
-      year_of_study: year_of_study,
-      gender: gender,
+      sex: sex,
       phone: phone
     }, function(json) {
       if (!json.success) {
-        $('#error-message-profile').html(json.message);
-        $('#error-box-profile').removeClass('hidden');
+        toastr.error("Unul sau mai multe câmpuri sunt goale sau conțin erori!");
         return;
       } else {
         location.reload();
