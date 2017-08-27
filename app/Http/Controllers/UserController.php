@@ -8,8 +8,10 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Mail;
 use App\User;
+use App\Message;
 use App\Contact;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -183,6 +185,61 @@ class UserController extends Controller
             return substr($name, 0, strpos($name, '@'));
         }
         return $name;
+    }
+
+    public function messagesTemplate(Request $request)
+    {
+        $user = Auth::user();
+        $messages = $user->messages()->orderBy('created_at', 'desc')->paginate(20);
+        $messages->withPath('/messages');
+
+        //$messages = Message::where('to','=',$user->id)->orderBy('created_at', 'desc')->get();
+        //$messages = DB::table('messages')->where('to', '=', 1)->get();
+        return view('messaging/messages', ['user' => $user,'messages' => $messages]);
+    }
+
+    public function deleteMessage(Request $request)
+    {
+        $user = Auth::user();
+        $id = $request->id;
+        $message = Message::find($id);
+        if (!$message){
+            abort(404);
+        }
+
+        if ($message->to != $user->id){
+            abort(500);
+        }
+        $message->delete();
+        return redirect('/messages');
+    }
+
+    public function messageViewTemplate(Request $request)
+    {
+
+        $id = $request->id;
+        $message = Message::find($id);
+        if (!$message){
+            abort(404);
+        }
+        $user = Auth::user();
+        if ($message->to != $user->id){
+            abort(500);
+        }
+
+        return view('messaging/message-view', ['message' => $message]);
+    }
+
+    public function createTestMessage(Request $request)
+    {
+        $message = new Message();
+        $message->to = 1;
+        $message->from = 2;
+        $message->subject = 'Test subiect';
+        $message->message = 'Test continut mesaj';
+        $message->save();
+
+        die('Trimis');
     }
 }
 

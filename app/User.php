@@ -20,6 +20,11 @@ class User extends Authenticatable
         return $this->hasOne(Contact::class);
     }
 
+    public function messages()
+    {
+        return $this->hasMany(Message::class,'to');
+    }
+
     protected $fillable = [
         'name', 'email', 'password',
     ];

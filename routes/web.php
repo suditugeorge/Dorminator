@@ -47,6 +47,19 @@ Route::group(['middleware' => 'isLogedIn'], function () {
         'uses' => 'UserController@changeProfilePhoto',
     ]);
 
+    Route::get('/messages', [
+        'uses' => 'UserController@messagesTemplate',
+    ]);
+
+    Route::get('/messages/{id}', [
+        'uses' => 'UserController@messageViewTemplate',
+    ]);
+
+    Route::get('/delete-message/{id}', [
+        'uses' => 'UserController@deleteMessage',
+    ]);
+
+
     //For these routes all the users must have a status of Admin or Super Admin
     Route::group(['middleware' => 'isAdmin'], function () {
 
@@ -71,9 +84,15 @@ Route::group(['middleware' => 'isLogedIn'], function () {
         Route::get('/email-preview/admin-confrimation/{email}', [
             'uses' => 'EmailPreview@adminConfrimation',
         ]);
+
+        //TESTING ONLY
         Route::get('/delete-user/{email}', [
             'uses' => 'UserController@deleteUser',
         ]);
+        Route::get('/create-test-message', [
+            'uses' => 'UserController@createTestMessage',
+        ]);
+
 
     });
 

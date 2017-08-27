@@ -82,14 +82,9 @@
                         <a class="nav-link"><i class="fa fa-envelope"></i> <span class="hidden-sm-down">Contact</span></a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="badge red">99</span> <i class="fa fa-bell"></i></a>
+                        <a class="nav-link" href="/messages" aria-expanded="false">
+                            <span class="badge red">99</span> <i class="fa fa-bell"></i>
                         </a>
-                        <div class="dropdown-menu header-notifications animated dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                            <ul>
-                                <li><a href="#"><i class="fa fa-bullhorn" aria-hidden="true"></i> Your campaign is about to end <span class="float-right grey-text"><i class="fa fa-clock-o" aria-hidden="true"></i> 3 hours</span></a></li>
-                            </ul>
-                        </div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" type="button" aria-haspopup="true" aria-expanded="false" href="/logout"><i class="fa fa-sign-out"></i> Logout</a>
