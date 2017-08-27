@@ -2,15 +2,13 @@
     <!-- First row -->
     <div class="row">
         <!-- First column -->
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="row mb-1">
-                <div class="col-md-9">
+                <div class="col-md-9 col-sm-12">
                     <h4 class="h4-responsive mt-1">Mesaje</h4>
                 </div>
-                <div class="col-md-3">
-                    <div class="md-form">
-                        <input placeholder="Search..." type="text" id="form5" class="form-control">
-                    </div>
+                <div class="col-md-3 text-right col-sm-12">
+                        <a href="/new-message" class="btn btn-unique">Mesaj Nou <i class="fa fa-pencil ml-1"></i></a>
                 </div>
             </div>
             <div class="row">
@@ -34,6 +32,7 @@
                                     <tr>
                                         <th>#</th>
                                         <th>De la</th>
+                                        <th>Subiect</th>
                                         <th>Acțiuni</th>
                                     </tr>
                                     </thead>
@@ -42,6 +41,7 @@
                                     <tr>
                                         <th scope="row">{{$message->id}}</th>
                                         <td>{{$message->user()->get()[0]->username}}</td>
+                                        <td>{{$message->subject}}</td>
                                         <td>
                                             <a class="teal-text" href="/messages/{{$message->id}}"><i class="fa fa-pencil"></i></a>
                                             <a class="red-text" href="/delete-message/{{$message->id}}"><i class="fa fa-times"></i></a>

@@ -48,15 +48,19 @@ Route::group(['middleware' => 'isLogedIn'], function () {
     ]);
 
     Route::get('/messages', [
-        'uses' => 'UserController@messagesTemplate',
+        'uses' => 'MessageController@messagesTemplate',
+    ]);
+
+    Route::match(['get', 'post'], '/new-message', [
+        'uses' => 'MessageController@newMessage'
     ]);
 
     Route::get('/messages/{id}', [
-        'uses' => 'UserController@messageViewTemplate',
+        'uses' => 'MessageController@messageViewTemplate',
     ]);
 
     Route::get('/delete-message/{id}', [
-        'uses' => 'UserController@deleteMessage',
+        'uses' => 'MessageController@deleteMessage',
     ]);
 
 
