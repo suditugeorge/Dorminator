@@ -6,18 +6,20 @@ $('#add-admins').click (e) ->
 	token = $('[name="_token"]').val()
 	emails = $('#emails').val().split("\n")
 	verified_emails = ""
+	send = true
 	emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 	$.each emails, (k) ->
 		if !emailRegex.test(emails[k])
-			$('#error-message-users').html("Adresa de email "+emails[k]+ " nu este validă!")
-			$('#error-box-users').removeClass 'hidden'
+			toastr.error("Adresa de email "+emails[k]+ " nu este validă!")
+			send = false
 			return
 		verified_emails = verified_emails + "\n" +emails[k]
-	$.post '/add-admins', {_token: token, emails: verified_emails} , (json) ->
-		if !json.success
-			toastr.error(json.message)
+	if send
+		$.post '/add-admins', {_token: token, emails: verified_emails} , (json) ->
+			if !json.success
+				toastr.error(json.message)
+				return
+			else
+				toastr.success(json.message)
 			return
-		else
-			toastr.success(json.message)
-		return
 	return

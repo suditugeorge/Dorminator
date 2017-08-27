@@ -39,7 +39,10 @@ Route::group(['middleware' => 'isLogedIn'], function () {
         'uses' => 'UserController@dashboard',
         'as' => 'dashboard',
     ]);
-    
+    Route::match(['get', 'post'], '/change-password', [
+        'uses' => 'UserController@changePasswordTemplate'
+    ]);
+
     Route::post('/change-profile-photo', [
         'uses' => 'UserController@changeProfilePhoto',
     ]);
@@ -67,6 +70,9 @@ Route::group(['middleware' => 'isLogedIn'], function () {
 
         Route::get('/email-preview/admin-confrimation/{email}', [
             'uses' => 'EmailPreview@adminConfrimation',
+        ]);
+        Route::get('/delete-user/{email}', [
+            'uses' => 'UserController@deleteUser',
         ]);
 
     });

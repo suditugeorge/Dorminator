@@ -8,8 +8,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Mail;
 use App\User;
-use App\UserAdmin;
-use App\UserNormal;
+use App\Contact;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -79,20 +78,30 @@ class UserController extends Controller
 
     public function addAdmins(Request $request)
     {
-        $request->emails = preg_split('`\s`', $request->emails);
-        foreach ($request->emails as $email) {
-            $url = 'http://dorminator.ro/add-admin-user/'.$email;
+        try{
+            $request->emails = preg_split('`\s`', $request->emails);
+            foreach ($request->emails as $email) {
+                $result = self::createAdmin($email);
+                if($result['success']){
+                    Mail::send('email-templates.admin-confirmation', ['user' => $result['user'], 'password' => $result['password']], function ($m) use ($email) {
+                        $m->from('i.tconsult99@gmail.com', 'Dorminator');
+                        $m->to($email)->subject('Dorminator are nevoie de atenția ta!');
+                    });
+                }
+            }
 
-            Mail::send('email-templates.admin-confirmation', ['url' => $url], function ($m) use ($email) {
-                $m->from('i.tconsult99@gmail.com', 'Dorminator');
-                $m->to($email)->subject('Dorminator are nevoie de atenția ta!');
-            });
+            return response()->json([
+                'success' => true,
+                'message' => 'S-a trimis invitație de înregistrare catre toate adresele de email',
+            ]);
+
+        }catch(\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'A intervenit o problemă! Vă rugăm să ne contactați telefonic.',
+            ]);
         }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'S-a trimis invitație de înregistrare catre toate adresele de email',
-        ]);  
     }
 
     public function createAdminInterface($email)
@@ -100,34 +109,80 @@ class UserController extends Controller
         return view('admin-signup',['email' => $email]);
     }
 
-    public function adminSignUp(Request $request)
+    public function deleteUser($email)
     {
+        $user = User::where('email', '=', $email)->first();
+        if($user->contact){
+            $user->contact->delete();
+        }
+        $user->delete();
+        print_r('Șters');
+        return;
+    }
 
-        try{
-            $user = new User();
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->phone = $request->phone;
+    public static function createAdmin($email)
+    {
+        $user = User::where('email', '=', $email)->first();
+        $result = ['success' => false, 'already_exist' => false, 'created' => false];
+        if($user){
+            $result['already_exist'] = true;
+            $result['user'] = $user;
+            return $result;
+        }
+        $tmp_password = self::generateRandomString();
+        $user = new User();
+        $user->email = $email;
+        $user->username = self::createUserName($email,true);
+        $user->has_temp_password = true;
+        $user->password =  Hash::make($tmp_password);
+        $user->is_admin = true;
+        $user->is_super_admin = false;
+        $user->save();
+
+        $contact = new Contact();
+        $user->contact()->save($contact);
+
+        $result['success'] = true;
+        $result['created'] = true;
+        $result['user'] = $user;
+        $result['password'] = $tmp_password;
+        return $result;
+    }
+
+    public function changePasswordTemplate(Request $request){
+        if ($request->isMethod('get')){
+            $user = Auth::user();
+            return view('change-password', ['user' => $user,]);
+        }elseif ($request->isMethod('post')){
+            $user = Auth::user();
             $user->password = Hash::make($request->password);
-            $user->is_super_admin = false;
-            $user->is_admin = true;
-            $user->gender = "Female";
-            $user->degree = "Admin";
-            $user->year_of_study = 4;
-            $user->grade = 10.00;
             $user->save();
-
             return response()->json([
                 'success' => true,
-            ]);         
-            
-        }catch(\Exception $e){
-            return response()->json([
-                'success' => false,
-                'message' => 'A intervenit o problemă! Vă rugăm să ne contactați telefonic.',
-            ]); 
+                'url' => '/profile',
+            ]);
+        }else{
+            abort(500, "Nu aveți dreptul pentru a accesa această pagină");
         }
 
+    }
+
+    public static function generateRandomString($length = 10) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    public static function createUserName($name, $fromEmail = false)
+    {
+        if($fromEmail){
+            return substr($name, 0, strpos($name, '@'));
+        }
+        return $name;
     }
 }
 

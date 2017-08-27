@@ -16,6 +16,8 @@ require('laravel-elixir-vue-2');
 elixir(mix => {
 	 mix.sass("home.scss")
 	 	.coffee("home.coffee")
+    	.coffee("main.coffee")
 	 	.coffee("profile.coffee")
+    	.coffee("change-password.coffee")
 	 	.coffee("users-admin.coffee");
 });
