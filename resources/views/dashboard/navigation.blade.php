@@ -17,21 +17,20 @@
                 <!-- Side navigation links -->
                 <li>
                     <ul class="collapsible collapsible-accordion">
-                        <li><a href="/dashboard" class="collapsible-header waves-effect arrow-r"><i class="fa fa-user"></i> Profil</a>
+                        <li><a href="/profile" class="collapsible-header waves-effect arrow-r"><i class="fa fa-user"></i> Profil</a>
                         @if(Auth::check() && ($user->is_admin || $user->is_super_admin))
                         <li><a href="/users" class="collapsible-header waves-effect arrow-r"><i class="fa fa-users"></i> Utilizatori</a>
-                        @endif
-                        <li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-code"></i> Dashboards<i class="fa fa-angle-down rotate-icon"></i></a>
+                        <li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-lock"></i> Admin<i class="fa fa-angle-down rotate-icon"></i></a>
                             <div class="collapsible-body">
                                 <ul>
-                                    <li><a href="home.html" class="waves-effect">Dahboard v1</a>
-                                    </li>
+                                    <li><a href="/add-institution" class="waves-effect"><i class="fa fa-building"></i>Adaugă instituții</a></li>
                                     <li><a href="home%20v2.html" class="waves-effect">Dahboard v2</a>
                                     </li>
                                     <li><a href="home%20v3.html" class="waves-effect">Dahboard v3</a>
                                     </li>
                                 </ul>
                             </div></li>
+                        @endif
                         <li><a href="analytics.html" class="collapsible-header waves-effect arrow-r"><i class="fa fa-pie-chart"></i> Analytics</a>
                         <li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-code"></i> Creators<i class="fa fa-angle-down rotate-icon"></i></a>
                             <div class="collapsible-body">

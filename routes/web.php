@@ -76,6 +76,13 @@ Route::group(['middleware' => 'isLogedIn'], function () {
             'uses' => 'UserController@adminGetUsers',
         ]);
 
+        Route::match(['get', 'post'], '/add-institution', [
+            'uses' => 'InstitutionController@addInstitution'
+        ]);
+
+        Route::get('/delete-institution/{id}', [
+            'uses' => 'InstitutionController@deleteInstitution',
+        ]);
         Route::post('/add-admins', [
             'uses' => 'UserController@addAdmins',
         ]);
