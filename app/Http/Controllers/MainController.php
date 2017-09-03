@@ -104,8 +104,7 @@ class MainController extends Controller
             $userAdmin->save();
 
             $contact = new Contact();
-            $contact->first_name = 'George';
-            $contact->last_name = 'Suditu';
+            $contact->name = 'George';
             $contact->grade = 10.00;
             $contact->cnp = '1940405100136';
             $contact->phone = '0755823880';

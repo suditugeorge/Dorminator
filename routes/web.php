@@ -83,10 +83,23 @@ Route::group(['middleware' => 'isLogedIn'], function () {
         Route::get('/delete-institution/{id}', [
             'uses' => 'InstitutionController@deleteInstitution',
         ]);
+        Route::match(['get', 'post'], '/add-students', [
+            'uses' => 'UserController@addStudentsTemplate'
+        ]);
         Route::post('/add-admins', [
             'uses' => 'UserController@addAdmins',
         ]);
+        Route::post('/upload-students', [
+            'uses' => 'StudentsController@uploadStudentsFile',
+        ]);
 
+        Route::get('/download-student-template', [
+            'uses' => 'UserController@downloadStudentTemplate',
+        ]);
+
+        Route::get('/get-students-pdf', [
+            'uses' => 'StudentsController@getPDF',
+        ]);
     });
 
     //For these routes the loged in user must be Super Admin

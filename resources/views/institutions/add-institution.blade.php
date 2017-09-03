@@ -39,7 +39,7 @@
 
                     <div class="md-form">
                         <i class="fa fa-building prefix grey-text"></i>
-                        <input type="text" class="form-control" id="institution-name">
+                        <input type="text" class="form-control required" id="institution-name">
                         <label for="institution-name">Nume instituție</label>
                     </div>
 

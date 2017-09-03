@@ -49,7 +49,7 @@
 
                 <div class="md-form">
                     <i class="fa fa-pencil prefix grey-text"></i>
-                    <textarea type="text" id="form8" class="md-textarea" style="height: 100px ;resize: vertical;" disabled>{{$message->message}}</textarea>
+                    <textarea type="text" id="form8" class="md-textarea" style="height: 100px ;resize: vertical;overflow-y: scroll;" disabled>{{$message->message}}</textarea>
                     <label for="form8">Conținutul mesajului</label>
                 </div>
 

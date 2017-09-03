@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 use Mail;
 use App\User;
+use App\Institution;
 use App\Message;
 use App\Contact;
 use Illuminate\Support\Facades\Hash;
@@ -200,5 +201,65 @@ class UserController extends Controller
 
         die('Trimis');
     }
+
+    public function addStudentsTemplate(Request $request)
+    {
+        if ($request->isMethod('get')){
+            $user = Auth::user();
+            $has_institutions = Institution::first();
+            $can_insert = true;
+            if(is_null($has_institutions)){
+                $can_insert = false;
+            }
+            $students = Contact::orderBy('grade', 'desc')->paginate(20);
+            $students->withPath('/add-students');
+            return view('students/add-student', ['user' => $user, 'can_insert' => $can_insert, 'students' => $students]);
+        }elseif ($request->isMethod('post')){
+            $institution = Institution::where('code', '=', $request->code)->first();
+
+            if(is_null($institution)){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Nu există nici o instituție cu codul furnizat.',
+                ]);
+            }
+
+            $user = new User();
+            $user->username = str_replace(' ','.',strtolower($request->name));
+            $user->password = Hash::make($user->username.floatval($request->grade));
+            $user->has_temp_password = true;
+            if (trim($request->email) == ''){
+                $domain = '';
+                $domain_names = explode(' ',$institution->name);
+                foreach ($domain_names as $dom){
+                    $domain .= strtolower($dom[0]);
+                }
+                $user->email = $user->username.'@'.$domain.'.com';
+                $user->has_temp_email = true;
+            }else{
+                $user->email = $request->email;
+                $user->has_tmp_email = false;
+            }
+            $user->is_admin = false;
+            $user->is_super_admin = false;
+            $user->save();
+
+            $contact = new Contact();
+            $contact->name = $request->name;
+            $contact->grade = floatval($request->grade);
+            $contact->cnp = $request->cnp;
+            $contact->phone = $request->phone;
+            $contact->sex = $request->sex;
+            $contact->institution_code = $institution->code;
+            $user->contact()->save($contact);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Studentul '. $contact->name . ' a fost adăugat în baza de date',
+            ]);
+        }
+
+    }
+
 }
 

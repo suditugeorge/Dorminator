@@ -15,8 +15,7 @@ class InstitutionController extends Controller
             $institutions = Institution::orderBy('created_at', 'desc')->paginate(20);
             return view('institutions/add-institution', ['user' => $user, 'institutions' => $institutions]);
         } elseif ($request->isMethod('post')) {
-            $institution = Institution::where('code', '=', $request->code)->get();
-
+            $institution = Institution::where('code', '=', $request->code)->first();
             if (!is_null($institution)) {
                 return response()->json([
                     'success' => false,

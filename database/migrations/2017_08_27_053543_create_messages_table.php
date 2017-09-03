@@ -20,7 +20,7 @@ class CreateMessagesTable extends Migration
             $table->integer('to')->unsigned();
             $table->foreign('to')->references('id')->on('users');
             $table->string('subject');
-            $table->string('message');
+            $table->text('message');
             $table->timestamps();
         });
     }
