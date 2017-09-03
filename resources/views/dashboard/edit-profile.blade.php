@@ -11,7 +11,7 @@
         <!--Second column-->
         <div class="col-md-6">
                 <div class="md-form">
-                    <input type="text" id="name" class="form-control validate" value="{{$user->contact->last_name}} {{$user->contact->first_name}}" disabled>
+                    <input type="text" id="name" class="form-control validate" value="{{$user->contact->name}}" disabled>
                     <label for="name" class="disabled">Nume</label>
                 </div>
         </div>
