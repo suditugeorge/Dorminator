@@ -16,6 +16,7 @@ require('laravel-elixir-vue-2');
 elixir(mix => {
 	 mix.sass("home.scss")
 	 	.coffee("home.coffee")
+		.coffee("dorm.coffee")
     	.coffee("student.coffee")
 		.coffee("institution.coffee")
     	.coffee("messages.coffee")

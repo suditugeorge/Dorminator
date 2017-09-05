@@ -100,6 +100,9 @@ Route::group(['middleware' => 'isLogedIn'], function () {
         Route::get('/get-students-pdf', [
             'uses' => 'StudentsController@getPDF',
         ]);
+        Route::get('/dorms', [
+            'uses' => 'DormsController@getDormsTemplate',
+        ]);
     });
 
     //For these routes the loged in user must be Super Admin

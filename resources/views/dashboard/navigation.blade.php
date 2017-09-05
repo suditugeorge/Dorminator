@@ -25,6 +25,7 @@
                                 <ul>
                                     <li><a href="/add-institution" class="waves-effect"><i class="fa fa-building"></i>Adaugă instituții</a></li>
                                     <li><a href="/add-students" class="waves-effect"><i class="fa fa-graduation-cap"></i>Adaugă studenți</a></li>
+                                    <li><a href="/dorms" class="waves-effect"><i class="fa fa-building"></i>Adaugă cămine</a></li>
                                     <li><a href="home%20v2.html" class="waves-effect">Dahboard v2</a>
                                     </li>
                                     <li><a href="home%20v3.html" class="waves-effect">Dahboard v3</a>

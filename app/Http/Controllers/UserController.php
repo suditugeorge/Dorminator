@@ -211,7 +211,7 @@ class UserController extends Controller
             if(is_null($has_institutions)){
                 $can_insert = false;
             }
-            $students = Contact::orderBy('grade', 'desc')->paginate(5);
+            $students = Contact::orderBy('grade', 'desc')->paginate(20);
             $students->withPath('/add-students');
             return view('students/add-student', ['user' => $user, 'can_insert' => $can_insert, 'students' => $students]);
         }elseif ($request->isMethod('post')){
