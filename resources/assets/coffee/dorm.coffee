@@ -32,7 +32,7 @@ $ ->
       hideSpinner()
       return
 
-    $.post '/add-dorm', {_token: token, name: name, code: code, description: description}, (json) ->
+    $.post '/dorms', {_token: token, name: name, code: code, description: description}, (json) ->
       if !json.success
         toastr.error(json.message)
         hideSpinner()

@@ -79,6 +79,9 @@ Route::group(['middleware' => 'isLogedIn'], function () {
         Route::match(['get', 'post'], '/add-institution', [
             'uses' => 'InstitutionController@addInstitution'
         ]);
+        Route::match(['get', 'post'], '/dorms', [
+            'uses' => 'DormsController@getDormsTemplate'
+        ]);
 
         Route::get('/delete-institution/{id}', [
             'uses' => 'InstitutionController@deleteInstitution',
@@ -99,9 +102,6 @@ Route::group(['middleware' => 'isLogedIn'], function () {
 
         Route::get('/get-students-pdf', [
             'uses' => 'StudentsController@getPDF',
-        ]);
-        Route::get('/dorms', [
-            'uses' => 'DormsController@getDormsTemplate',
         ]);
     });
 
