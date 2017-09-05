@@ -31,7 +31,7 @@ class UrlWindow
      * @param  int  $onEachSide
      * @return array
      */
-    public static function make(PaginatorContract $paginator, $onEachSide = 3)
+    public static function make(PaginatorContract $paginator, $onEachSide = 1)
     {
         return (new static($paginator))->get($onEachSide);
     }
