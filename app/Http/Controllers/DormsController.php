@@ -149,6 +149,9 @@ class DormsController extends Controller
                 $has_applied = true;
             }
 
+            $dbstat = Dbstat::orderBy('created_at', 'desc')->first();
+
+            $data['db_stat'] = $dbstat;
             $data['has_applied'] = $has_applied;
             $data['user'] = $user;
             $data['has_been_accepted'] = $has_been_accepted;

@@ -33,7 +33,7 @@ $(function() {
 
 @section('content')
 @include('dashboard.navigation')
-<main class="">
+<main class="mainContainer">
 <div class="container-fluid">
     <!-- Section: Edit Account -->
     <section class="section">

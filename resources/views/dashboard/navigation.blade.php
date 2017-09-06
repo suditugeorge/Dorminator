@@ -30,14 +30,11 @@
                                 </div>
                             </li>
                             <li><a href="#" class="collapsible-header waves-effect arrow-r" id="start-sort"><i class="fa fa-database"></i> Pornește sortarea</a>
+                            <li><a href="#" class="collapsible-header waves-effect arrow-r red-text" id="stop-dorminator"><i class="fa fa-ban"></i> Oprește cazarea</a>
                         @endif
                         @if(Auth::check() && !$user->is_admin && !$user->is_super_admin)
                             <li><a href="/select-dorm" class="collapsible-header waves-effect arrow-r"><i class="fa fa-building"></i> Cămine</a></li>
                         @endif
-
-                        <li><a href="invoice.html" class="collapsible-header waves-effect arrow-r"><i class="fa fa-money"></i> Invoice</a>
-                        <li><a href="support.html" class="collapsible-header waves-effect arrow-r"><i class="fa fa-support"></i> Support</a>
-                        <li><a href="faq.html" class="collapsible-header waves-effect arrow-r"><i class="fa fa-question-circle" aria-hidden="true"></i> FAQ</a>
                     </ul>
                 </li>
                 <!--/. Side navigation links -->
@@ -56,12 +53,7 @@
                 </div>
                 <ul class="nav navbar-nav nav-flex-icons ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link"><i class="fa fa-envelope"></i> <span class="hidden-sm-down">Contact</span></a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link" href="/messages" aria-expanded="false">
-                            <span class="badge red">99</span> <i class="fa fa-bell"></i>
-                        </a>
+                        <a href="/messages" class="nav-link"><i class="fa fa-envelope"></i></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" type="button" aria-haspopup="true" aria-expanded="false" href="/logout"><i class="fa fa-sign-out"></i> Logout</a>

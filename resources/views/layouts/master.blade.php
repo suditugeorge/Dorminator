@@ -20,11 +20,13 @@
 <script type="text/javascript" src="{{ URL::asset('js/layout/jquery-3.1.1.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/main.js') }}"></script>
 @yield('content')
-
+{{--@include('layouts.footer') --}}
+<div class="hiddendiv common"></div>
 <script type="text/javascript" src="{{ URL::asset('js/layout/tether.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/layout/bootstrap.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/layout/mdb.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/layout/toastr.js') }}"></script>
 @yield('scripts')
 </body>
+
 </html>

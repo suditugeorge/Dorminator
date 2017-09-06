@@ -3,7 +3,10 @@
         <div class="alert alert-success">
             <p><strong>FELICITĂRI!</strong> Căminul în care ați intrat este {{$main_dorm->name}}.</p>
         </div>
-
+    @elseif($db_stat->end)
+        <div class="alert alert-error">
+            <p><strong>Ne pare rău!</strong> Din păcate nu ați reușit să intrați într-un cămin.<br/>Dacă aveți întrebări vă rugăm să ne contactați telefonic.</p>
+        </div>
     @elseif($has_applied)
             <div class="alert alert-success">
                 <p>Ați aplicat cu succes pentru un loc în cămin.<br/>Imediat cum aplicarea este procesată veți primi email și un mesaj în aplicație.<br/>
@@ -11,6 +14,10 @@
                     la care mai puteți aplica.
                 </p>
             </div>
+    @elseif(!$db_stat->end && !$db_stat->can_operate)
+        <div class="alert alert-error">
+            <p><strong>Ne pare rău!</strong> Din păcate aplicația este în procesul de sortare.<br/>Vă vom anunța când aceasta este gata printr-un mesaj în aplicație. Din acest motiv vă rugăm să accesați secțiunea "Mesaje" cât mai des.</p>
+        </div>
     @else
         <div class="alert alert-info">
             <p><strong>Atenție!</strong> Căminul selectat vă reprezenta opțiunea dumneavoastră. Dacă nu vi se va aproba selecția veți primi email și un mesaj în aplicație.<br/>

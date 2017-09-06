@@ -82,7 +82,7 @@ $(function() {
             <!-- /.Second column -->
         </div>
         <!-- /.First row -->
-        @include('dashboard.admin-users')
+
     </section>
     <!-- /.Section: Edit Account -->
 </div>

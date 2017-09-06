@@ -1,1 +1,1 @@
-{"version":3,"sources":["home.scss"],"names":[],"mappings":"AAAA;EACC,qBAAqB;CACrB;;AAED;EACC,yBAAyB;CACzB;;AAED;EACC,eAAe;CACf","file":"home.css","sourcesContent":[".card {\n\tmargin-bottom: 100px;\n}\n\n.hidden {\n\tdisplay: none !important;\n}\n\n.view {\n\theight: 1000px;\n}"]}
+{"version":3,"sources":["home.scss"],"names":[],"mappings":"AAAA;EACC,qBAAqB;CACrB;;AAED;EACC,yBAAyB;CACzB","file":"home.css","sourcesContent":[".card {\n\tmargin-bottom: 100px;\n}\n\n.hidden {\n\tdisplay: none !important;\n}\n"]}
