@@ -49,7 +49,7 @@
             <!--Panel 1-->
             <div class="tab-pane fade" id="panel1" role="tabpanel">
                 <br/>
-
+                @include('dorms.add-rooms')
             </div>
             <!--/.Panel 1-->
         </div>

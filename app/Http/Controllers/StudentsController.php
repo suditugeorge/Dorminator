@@ -29,8 +29,13 @@ class StudentsController extends Controller
         Excel::load($path, function($reader) {
             $reader->each(function($row) {
                 // Loop through all rows
-                self::createStudent($row);
-                $this->message .= "\nA fost adăugat ". $row->nume_prenume;
+                $result = self::createStudent($row);
+                if($result['success']){
+                    $this->message .= "\nA fost adăugat ". $row->nume_prenume;
+                }else{
+                    $this->message .= "\n". $result['message'];
+                }
+
             });
 
         });

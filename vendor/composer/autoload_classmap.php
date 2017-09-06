@@ -12,6 +12,7 @@ return array(
     'CreateInstitutionsTable' => $baseDir . '/database/migrations/2017_08_31_113033_create_institutions_table.php',
     'CreateMessagesTable' => $baseDir . '/database/migrations/2017_08_27_053543_create_messages_table.php',
     'CreatePasswordResetsTable' => $baseDir . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
+    'CreateRoomsTable' => $baseDir . '/database/migrations/2017_09_06_073527_create_rooms_table.php',
     'CreateUsersTable' => $baseDir . '/database/migrations/2014_10_12_000000_create_users_table.php',
     'DatabaseSeeder' => $baseDir . '/database/seeds/DatabaseSeeder.php',
     'File_Iterator' => $vendorDir . '/phpunit/php-file-iterator/src/Iterator.php',

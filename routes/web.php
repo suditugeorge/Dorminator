@@ -95,6 +95,9 @@ Route::group(['middleware' => 'isLogedIn'], function () {
         Route::post('/upload-students', [
             'uses' => 'StudentsController@uploadStudentsFile',
         ]);
+        Route::post('/upload-rooms', [
+            'uses' => 'DormsController@uploadRoomsFile',
+        ]);
 
         Route::get('/download-student-template', [
             'uses' => 'UserController@downloadStudentTemplate',
