@@ -110,6 +110,11 @@ Route::group(['middleware' => 'isLogedIn'], function () {
         Route::get('/get-students-pdf', [
             'uses' => 'StudentsController@getPDF',
         ]);
+
+        Route::post('/start-sort', [
+            'uses' => 'DormsController@startSort',
+        ])->middleware(\App\Http\Middleware\StartSorting::class);
+
     });
 
     //For these routes the loged in user must be Super Admin

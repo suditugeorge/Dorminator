@@ -6,6 +6,14 @@ hideSpinner = ->
   $('#send-dorm').removeClass('hidden')
   $('.spinner-wrap').addClass('hidden')
   return
+showSpinnerNormal = ->
+  $('.spinner-wrap').removeClass('hidden')
+  $('#pick-dorm').addClass('hidden')
+  return
+hideSpinnerNormal = ->
+  $('.spinner-wrap').addClass('hidden')
+  $('#pick-dorm').removeClass('hidden')
+  return
 
 removeInvalidClasses = ->
   $('#dorm-name').removeClass 'invalid'
@@ -41,5 +49,20 @@ $ ->
         toastr.success(json.message)
         hideSpinner()
         $('#send-dorm').addClass('hidden')
+      return
     return
-  return
+
+  $('#pick-dorm').click (e) ->
+    e.preventDefault()
+    showSpinnerNormal()
+    token = $('[name="_token"]').val()
+    dorm = $('#dorm-select').val()
+    $.post '/select-dorm', {_token: token, dorm:dorm}, (json) ->
+      if !json.success
+        toastr.error(json.message)
+        hideSpinnerNormal()
+        return
+      else
+        window.location.href = '/select-dorm'
+      return
+    return

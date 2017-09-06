@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Contact;
+use App\Dbstat;
 use App\User;
 use App\UserAdmin;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ class MainController extends Controller
     	
     	if(is_null($has_root)){
     		self::initializeRoot();
+    		self::updateDBStat();
     	}
 
         if(Auth::check()){
@@ -24,6 +26,15 @@ class MainController extends Controller
         }
 
     	return view('home');
+    }
+
+    public static function updateDBStat()
+    {
+        $stat = new Dbstat();
+        $stat->start = false;
+        $stat->end = false;
+        $stat->can_operate = true;
+        $stat->save();
     }
 
     public function login(Request $request)

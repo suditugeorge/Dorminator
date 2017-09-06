@@ -333,6 +333,7 @@ class ComposerStaticInit38be477c421c2971efbed668409c2d5d
     public static $classMap = array (
         'Cpdf' => __DIR__ . '/..' . '/dompdf/dompdf/lib/Cpdf.php',
         'CreateContactsTable' => __DIR__ . '/../..' . '/database/migrations/2017_08_10_024146_create_contacts_table.php',
+        'CreateDbstatsTable' => __DIR__ . '/../..' . '/database/migrations/2017_09_06_212407_create_dbstats_table.php',
         'CreateDormsTable' => __DIR__ . '/../..' . '/database/migrations/2017_09_05_011305_create_dorms_table.php',
         'CreateInstitutionsTable' => __DIR__ . '/../..' . '/database/migrations/2017_08_31_113033_create_institutions_table.php',
         'CreateMessagesTable' => __DIR__ . '/../..' . '/database/migrations/2017_08_27_053543_create_messages_table.php',

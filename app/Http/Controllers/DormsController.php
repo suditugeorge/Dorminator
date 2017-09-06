@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Dbstat;
 use App\Movement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -115,11 +116,15 @@ class DormsController extends Controller
 
     public function selectDorm(Request $request)
     {
+        $user = Auth::user();
         if ($request->isMethod('get')) {
-            $user = Auth::user();
             $has_been_accepted = false;
-            if(!is_null(Movement::where('user_id', '=', $user->id)->where('has_been_parsed', '=', true)->where('acceptance', '=', true)->first())){
+            $data = [];
+            $main_movement = Movement::where('user_id', '=', $user->id)->where('has_been_parsed', '=', true)->where('acceptance', '=', true)->first();
+
+            if(!is_null($main_movement)){
                 $has_been_accepted = true;
+                $data['main_dorm'] = Dorm::where('code','=', $main_movement->dorm_code)->first();
             }
             $codes = [];
             $dorm_codes = DB::table('rooms')->select(DB::raw('distinct dorm_code'))->where('institution_code', '=', $user->contact->institution_code)->get()->toArray();
@@ -127,7 +132,116 @@ class DormsController extends Controller
                 $codes[] = $dorm_code->dorm_code;
             }
             $dorms = Dorm::whereIn('code', $codes)->paginate(20);
-            return view('dorms/select-dorm', ['user' => $user, 'has_been_accepted' => $has_been_accepted, 'dorms' => $dorms]);
+            $can_apply = false;
+            $can_apply_dorm_codes = DB::table('rooms')->select(DB::raw('distinct dorm_code'))->where('institution_code', '=', $user->contact->institution_code)->whereRaw('occupation < capacity')->get()->toArray();
+            if(!is_null($can_apply_dorm_codes) && is_array($can_apply_dorm_codes) && count($can_apply_dorm_codes) > 0){
+                $can_apply = true;
+            }
+            $can_apply_codes = [];
+            foreach ($can_apply_dorm_codes as $dorm_code){
+                $can_apply_codes[] = $dorm_code->dorm_code;
+            }
+            $dorms_can_apply = Dorm::whereIn('code', $can_apply_codes)->get();
+
+            $has_applied = false;
+            $has_applied_quesry = Movement::where('user_id', '=', $user->id)->where('has_been_parsed', '=', false)->orderBy('created_at', 'desc')->first();
+            if(!is_null($has_applied_quesry)){
+                $has_applied = true;
+            }
+
+            $data['has_applied'] = $has_applied;
+            $data['user'] = $user;
+            $data['has_been_accepted'] = $has_been_accepted;
+            $data['dorms'] = $dorms;
+            $data['can_apply'] = $can_apply;
+            $data['dorms_can_apply'] = $dorms_can_apply;
+            return view('dorms/select-dorm', $data);
+        }elseif ($request->isMethod('post')){
+            $dorm = Dorm::where('code','=', $request->dorm)->first();
+            if(is_null($dorm)){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Nu există cămin cu acest cod',
+                ]);
+            }
+            $movement = new Movement();
+            $movement->user_id = $user->id;
+            $movement->institution_code = $user->contact->institution_code;
+            $movement->dorm_code = $request->dorm;
+            $movement->acceptance = false;
+            $movement->has_been_parsed = false;
+            $movement->sex = $user->contact->sex;
+            $movement->grade = $user->contact->grade;
+            $movement->room_id = -1;
+            $movement->save();
+            return response()->json([
+                'success' => true,
+            ]);
         }
+    }
+
+    public function startSort(Request $request)
+    {
+
+        return response()->json([
+            'success' => true,
+            'message' => 'A început sortarea studenților.'
+        ]);
+    }
+
+    public static function beginSort()
+    {
+        $stat = new Dbstat();
+        $stat->start = true;
+        $stat->end = false;
+        $stat->can_operate = false;
+        $stat->save();
+
+        $institutions = Institution::orderBy('created_at', 'asc')->get();
+        foreach ($institutions as $institution)
+        {
+            $rooms = Room::where('institution_code', '=', $institution->code)->whereRaw('occupation < capacity')->cursor();
+            foreach ($rooms as $room){
+                if($room->occupation == 0){
+                    $highest_movement = Movement::where('dorm_code', '=', $room->dorm_code)->where('institution_code', '=', $institution->code)->where('has_been_parsed', '=', false)->orderBy('grade', 'desc')->first();
+                    if(!is_null($highest_movement)){
+                        $movements = Movement::where('dorm_code', '=', $room->dorm_code)->where('institution_code', '=', $institution->code)->where('has_been_parsed', '=', false)->where('sex', '=', $highest_movement->sex)->orderBy('grade', 'desc')->limit($room->capacity)->get();
+                        $occupation = $room->occupation;
+                        foreach ($movements as $movement){
+                            $movement->has_been_parsed = true;
+                            $movement->acceptance = true;
+                            $movement->room_id = $room->id;
+                            $movement->save();
+                            $occupation++;
+                        }
+                        $room->occupation = $occupation;
+                        $room->save();
+                    }
+                }else{
+                    $highest_movement = Movement::where('room_id', '=', $room->id)->where('dorm_code', '=', $room->dorm_code)->where('institution_code', '=', $institution->code)->where('has_been_parsed', '=', true)->orderBy('grade', 'desc')->first();
+                    if(!is_null($highest_movement)){
+                        $limit = $room->capacity - $room->occupation;
+                        $movements = Movement::where('dorm_code', '=', $room->dorm_code)->where('institution_code', '=', $institution->code)->where('has_been_parsed', '=', false)->where('sex', '=', $highest_movement->sex)->orderBy('grade', 'desc')->limit($limit)->get();
+                        if(!is_null($movements)){
+                            foreach ($movements as $movement){
+                                $movement->has_been_parsed = true;
+                                $movement->acceptance = true;
+                                $movement->room_id = $room->id;
+                                $movement->save();
+                                $room->occupation = $room->occupation + 1;
+                            }
+                            $room->save();
+                        }
+                    }
+                }
+            }
+        }
+
+        $stat = new Dbstat();
+        $stat->start = false;
+        $stat->end = false;
+        $stat->can_operate = true;
+        $stat->save();
+
     }
 }

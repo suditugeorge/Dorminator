@@ -29,13 +29,13 @@
                     <tbody>
                     @foreach ($students as $student)
                         <tr>
-                            <th scope="row">{{$student->id}}</th>
-                            <td>{{$student->name}}</td>
-                            <td>{{$student->grade}}</td>
-                            <td>{{$student->cnp}}</td>
-                            <td>{{$student->phone}}</td>
-                            <td>{{$student->sex}}</td>
-                            <td>{{$student->institution_code}}</td>
+                            <th scope="row">{{$student->contact->id}}</th>
+                            <td>{{$student->contact->name}}</td>
+                            <td>{{$student->contact->grade}}</td>
+                            <td>{{$student->contact->cnp}}</td>
+                            <td>{{$student->contact->phone}}</td>
+                            <td>{{$student->contact->sex}}</td>
+                            <td>{{$student->contact->institution_code}}</td>
                         </tr>
                     @endforeach
                     </tbody>

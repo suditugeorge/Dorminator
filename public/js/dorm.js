@@ -1,5 +1,5 @@
 (function() {
-  var hideSpinner, removeInvalidClasses, showSpinner;
+  var hideSpinner, hideSpinnerNormal, removeInvalidClasses, showSpinner, showSpinnerNormal;
 
   showSpinner = function() {
     $('#send-dorm').addClass('hidden');
@@ -9,6 +9,16 @@
   hideSpinner = function() {
     $('#send-dorm').removeClass('hidden');
     $('.spinner-wrap').addClass('hidden');
+  };
+
+  showSpinnerNormal = function() {
+    $('.spinner-wrap').removeClass('hidden');
+    $('#pick-dorm').addClass('hidden');
+  };
+
+  hideSpinnerNormal = function() {
+    $('.spinner-wrap').addClass('hidden');
+    $('#pick-dorm').removeClass('hidden');
   };
 
   removeInvalidClasses = function() {
@@ -47,10 +57,30 @@
         if (!json.success) {
           toastr.error(json.message);
           hideSpinner();
+          return;
         } else {
           toastr.success(json.message);
           hideSpinner();
-          return $('#send-dorm').addClass('hidden');
+          $('#send-dorm').addClass('hidden');
+        }
+      });
+    });
+    return $('#pick-dorm').click(function(e) {
+      var dorm, token;
+      e.preventDefault();
+      showSpinnerNormal();
+      token = $('[name="_token"]').val();
+      dorm = $('#dorm-select').val();
+      $.post('/select-dorm', {
+        _token: token,
+        dorm: dorm
+      }, function(json) {
+        if (!json.success) {
+          toastr.error(json.message);
+          hideSpinnerNormal();
+          return;
+        } else {
+          window.location.href = '/select-dorm';
         }
       });
     });

@@ -33,6 +33,9 @@
         <div class="container-fluid">
             <div class="container">
                 <!-- Form contact -->
+                <div class="alert alert-warning">
+                    <p><strong>Atenție!</strong> Câmpurile marcate cu * sunt obligatorii.</p>
+                </div>
                 <form>
 
                     <p class="h5 text-center mb-4">Instituție Nouă</p>
@@ -40,13 +43,13 @@
                     <div class="md-form">
                         <i class="fa fa-building prefix grey-text"></i>
                         <input type="text" class="form-control required" id="institution-name">
-                        <label for="institution-name">Nume instituție</label>
+                        <label for="institution-name">Nume instituție *</label>
                     </div>
 
                     <div class="md-form">
                         <i class="fa fa-code prefix grey-text"></i>
                         <input type="text" class="form-control" id="institution-code">
-                        <label for="institution-code">Cod instituție</label>
+                        <label for="institution-code">Cod instituție *</label>
                     </div>
 
                     <div class="md-form">

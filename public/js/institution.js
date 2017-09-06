@@ -18,7 +18,7 @@
   };
 
   $(function() {
-    $('#send-institution').click(function(e) {
+    return $('#send-institution').click(function(e) {
       var code, description, name, token;
       e.preventDefault();
       removeInvalidClasses();
@@ -39,12 +39,6 @@
         hideSpinner();
         return;
       }
-      if (description.trim() === "") {
-        $('#institution-description').addClass('invalid');
-        toastr.error("Unul sau mai multe câmpuri sunt goale sau conțin erori!");
-        hideSpinner();
-        return;
-      }
       $.post('/add-institution', {
         _token: token,
         name: name,
@@ -54,10 +48,9 @@
         if (!json.success) {
           toastr.error(json.message);
           hideSpinner();
+          return;
         } else {
-          toastr.success(json.message);
-          hideSpinner();
-          return $('#send-institution').addClass('hidden');
+          window.location.href = '/add-institution';
         }
       });
     });

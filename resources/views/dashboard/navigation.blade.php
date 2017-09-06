@@ -19,7 +19,7 @@
                     <ul class="collapsible collapsible-accordion">
                         <li><a href="/profile" class="collapsible-header waves-effect arrow-r"><i class="fa fa-user"></i> Profil</a></li>
                         @if(Auth::check() && ($user->is_admin || $user->is_super_admin))
-                            <li><a href="/users" class="collapsible-header waves-effect arrow-r"><i class="fa fa-users"></i> Utilizatori</a></li>
+                            <li><a href="/users" class="collapsible-header waves-effect arrow-r"><i class="fa fa-users"></i> Adaugă admini</a></li>
                             <li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-lock"></i> Admin<i class="fa fa-angle-down rotate-icon"></i></a>
                                 <div class="collapsible-body">
                                     <ul>
@@ -29,11 +29,12 @@
                                     </ul>
                                 </div>
                             </li>
+                            <li><a href="#" class="collapsible-header waves-effect arrow-r" id="start-sort"><i class="fa fa-database"></i> Pornește sortarea</a>
                         @endif
                         @if(Auth::check() && !$user->is_admin && !$user->is_super_admin)
                             <li><a href="/select-dorm" class="collapsible-header waves-effect arrow-r"><i class="fa fa-building"></i> Cămine</a></li>
                         @endif
-                        <li><a href="clients.html" class="collapsible-header waves-effect arrow-r"><i class="fa fa-users"></i> Clients</a>
+
                         <li><a href="invoice.html" class="collapsible-header waves-effect arrow-r"><i class="fa fa-money"></i> Invoice</a>
                         <li><a href="support.html" class="collapsible-header waves-effect arrow-r"><i class="fa fa-support"></i> Support</a>
                         <li><a href="faq.html" class="collapsible-header waves-effect arrow-r"><i class="fa fa-question-circle" aria-hidden="true"></i> FAQ</a>

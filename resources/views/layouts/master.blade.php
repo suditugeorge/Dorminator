@@ -17,13 +17,14 @@
 
 <body class="fixed-sn black-skin">
 <input type="hidden" name="_token" value="{{Session::token()}}">
-@yield('content')
 <script type="text/javascript" src="{{ URL::asset('js/layout/jquery-3.1.1.min.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/main.js') }}"></script>
+@yield('content')
+
 <script type="text/javascript" src="{{ URL::asset('js/layout/tether.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/layout/bootstrap.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/layout/mdb.min.js') }}"></script>
 <script type="text/javascript" src="{{ URL::asset('js/layout/toastr.js') }}"></script>
-<script type="text/javascript" src="{{ URL::asset('js/main.js') }}"></script>
 @yield('scripts')
 </body>
 </html>
