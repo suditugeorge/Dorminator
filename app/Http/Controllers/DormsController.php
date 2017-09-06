@@ -247,4 +247,18 @@ class DormsController extends Controller
         $stat->save();
 
     }
+
+    public function stopDorminator(Request $request)
+    {
+        $stat = new Dbstat();
+        $stat->start = false;
+        $stat->end = true;
+        $stat->can_operate = false;
+        $stat->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Toate procesele de cazare sunt din acest moment oprite.',
+        ]);
+    }
 }

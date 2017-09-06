@@ -115,6 +115,10 @@ Route::group(['middleware' => 'isLogedIn'], function () {
             'uses' => 'DormsController@startSort',
         ])->middleware(\App\Http\Middleware\StartSorting::class);
 
+        Route::post('/stop-dorminator', [
+            'uses' => 'DormsController@stopDorminator',
+        ]);
+
     });
 
     //For these routes the loged in user must be Super Admin
