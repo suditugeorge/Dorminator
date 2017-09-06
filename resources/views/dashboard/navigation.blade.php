@@ -17,47 +17,22 @@
                 <!-- Side navigation links -->
                 <li>
                     <ul class="collapsible collapsible-accordion">
-                        <li><a href="/profile" class="collapsible-header waves-effect arrow-r"><i class="fa fa-user"></i> Profil</a>
+                        <li><a href="/profile" class="collapsible-header waves-effect arrow-r"><i class="fa fa-user"></i> Profil</a></li>
                         @if(Auth::check() && ($user->is_admin || $user->is_super_admin))
-                        <li><a href="/users" class="collapsible-header waves-effect arrow-r"><i class="fa fa-users"></i> Utilizatori</a>
-                        <li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-lock"></i> Admin<i class="fa fa-angle-down rotate-icon"></i></a>
-                            <div class="collapsible-body">
-                                <ul>
-                                    <li><a href="/add-institution" class="waves-effect"><i class="fa fa-building"></i>Adaugă instituții</a></li>
-                                    <li><a href="/add-students" class="waves-effect"><i class="fa fa-graduation-cap"></i>Adaugă studenți</a></li>
-                                    <li><a href="/dorms" class="waves-effect"><i class="fa fa-building"></i>Adaugă cămine</a></li>
-                                    <li><a href="home%20v2.html" class="waves-effect">Dahboard v2</a>
-                                    </li>
-                                    <li><a href="home%20v3.html" class="waves-effect">Dahboard v3</a>
-                                    </li>
-                                </ul>
-                            </div></li>
+                            <li><a href="/users" class="collapsible-header waves-effect arrow-r"><i class="fa fa-users"></i> Utilizatori</a></li>
+                            <li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-lock"></i> Admin<i class="fa fa-angle-down rotate-icon"></i></a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li><a href="/add-institution" class="waves-effect"><i class="fa fa-building"></i>Adaugă instituții</a></li>
+                                        <li><a href="/add-students" class="waves-effect"><i class="fa fa-graduation-cap"></i>Adaugă studenți</a></li>
+                                        <li><a href="/dorms" class="waves-effect"><i class="fa fa-building"></i>Adaugă cămine</a></li>
+                                    </ul>
+                                </div>
+                            </li>
                         @endif
-                        <li><a href="analytics.html" class="collapsible-header waves-effect arrow-r"><i class="fa fa-pie-chart"></i> Analytics</a>
-                        <li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-code"></i> Creators<i class="fa fa-angle-down rotate-icon"></i></a>
-                            <div class="collapsible-body">
-                                <ul>
-                                    <li><a href="modals.html" class="waves-effect">Modals</a>
-                                    </li>
-                                    <li><a href="page-create.html" class="waves-effect">Create Page</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-lock"></i> Forms<i class="fa fa-angle-down rotate-icon"></i></a>
-                            <div class="collapsible-body">
-                                <ul>
-                                    <li><a href="signup.html" class="waves-effect">Sign up</a>
-                                    </li>
-                                    <li><a href="signup%20v2.html" class="waves-effect">Sign up v2</a>
-                                    </li>
-                                    <li><a href="login.html" class="waves-effect">Login</a>
-                                    </li>
-                                    <li><a href="editaccount.html" class="waves-effect">Edit Account</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
+                        @if(Auth::check() && !$user->is_admin && !$user->is_super_admin)
+                            <li><a href="/select-dorm" class="collapsible-header waves-effect arrow-r"><i class="fa fa-building"></i> Cămine</a></li>
+                        @endif
                         <li><a href="clients.html" class="collapsible-header waves-effect arrow-r"><i class="fa fa-users"></i> Clients</a>
                         <li><a href="invoice.html" class="collapsible-header waves-effect arrow-r"><i class="fa fa-money"></i> Invoice</a>
                         <li><a href="support.html" class="collapsible-header waves-effect arrow-r"><i class="fa fa-support"></i> Support</a>

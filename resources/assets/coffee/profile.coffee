@@ -12,6 +12,7 @@ $('#change-user-profile').click (e) ->
 	formHasErrors = false
 	emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 	if !emailRegex.test(email)
+		console.log 'eorare email'
 		$('#email').addClass('invalid')
 		formHasErrors = true
 	phoneRegex = /^[0-9]+$/

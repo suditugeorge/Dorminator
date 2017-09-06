@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Movement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Dorm;
 use App\Room;
 use App\Institution;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Excel;
@@ -109,5 +111,23 @@ class DormsController extends Controller
         }
 
         return $available_codes;
+    }
+
+    public function selectDorm(Request $request)
+    {
+        if ($request->isMethod('get')) {
+            $user = Auth::user();
+            $has_been_accepted = false;
+            if(!is_null(Movement::where('user_id', '=', $user->id)->where('has_been_parsed', '=', true)->where('acceptance', '=', true)->first())){
+                $has_been_accepted = true;
+            }
+            $codes = [];
+            $dorm_codes = DB::table('rooms')->select(DB::raw('distinct dorm_code'))->where('institution_code', '=', $user->contact->institution_code)->get()->toArray();
+            foreach ($dorm_codes as $dorm_code){
+                $codes[] = $dorm_code->dorm_code;
+            }
+            $dorms = Dorm::whereIn('code', $codes)->paginate(20);
+            return view('dorms/select-dorm', ['user' => $user, 'has_been_accepted' => $has_been_accepted, 'dorms' => $dorms]);
+        }
     }
 }

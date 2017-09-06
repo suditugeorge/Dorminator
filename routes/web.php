@@ -63,6 +63,10 @@ Route::group(['middleware' => 'isLogedIn'], function () {
         'uses' => 'MessageController@deleteMessage',
     ]);
 
+    Route::match(['get', 'post'], '/select-dorm', [
+        'uses' => 'DormsController@selectDorm'
+    ]);
+
 
     //For these routes all the users must have a status of Admin or Super Admin
     Route::group(['middleware' => 'isAdmin'], function () {
