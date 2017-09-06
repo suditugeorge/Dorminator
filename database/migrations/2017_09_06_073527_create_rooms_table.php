@@ -19,6 +19,7 @@ class CreateRoomsTable extends Migration
             $table->string('institution_code')->nullable();
             $table->integer('room_number')->nullable();
             $table->integer('capacity')->nullable();
+            $table->integer('occupation')->default(0);
             $table->timestamps();
         });
     }

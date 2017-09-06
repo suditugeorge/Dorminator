@@ -14,7 +14,7 @@ use Excel;
 class DormsController extends Controller
 {
     public $message = '';
-    
+
     public function getDormsTemplate(Request $request)
     {
         if ($request->isMethod('get')) {
@@ -95,5 +95,19 @@ class DormsController extends Controller
         }
         return ['success' => true];
 
+    }
+
+    public static function getAvailableDorms()
+    {
+        $dorms = Dorm::all();
+        $available_codes = [];
+        foreach ($dorms as $dorm){
+            $room = Room::where('dorm_code', '=', $dorm->code)->where('institution_code', '=', 'INFO')->whereRaw('occupation < capacity')->first();
+            if(!is_null($room)){
+                $available_codes[] = $dorm->code;
+            }
+        }
+
+        return $available_codes;
     }
 }

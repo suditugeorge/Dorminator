@@ -11,6 +11,7 @@ return array(
     'CreateDormsTable' => $baseDir . '/database/migrations/2017_09_05_011305_create_dorms_table.php',
     'CreateInstitutionsTable' => $baseDir . '/database/migrations/2017_08_31_113033_create_institutions_table.php',
     'CreateMessagesTable' => $baseDir . '/database/migrations/2017_08_27_053543_create_messages_table.php',
+    'CreateMovementsTable' => $baseDir . '/database/migrations/2017_09_06_102546_create_movements_table.php',
     'CreatePasswordResetsTable' => $baseDir . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
     'CreateRoomsTable' => $baseDir . '/database/migrations/2017_09_06_073527_create_rooms_table.php',
     'CreateUsersTable' => $baseDir . '/database/migrations/2014_10_12_000000_create_users_table.php',
