@@ -185,7 +185,6 @@ class DormsController extends Controller
 
     public function startSort(Request $request)
     {
-
         return response()->json([
             'success' => true,
             'message' => 'A început sortarea studenților.'
@@ -237,6 +236,14 @@ class DormsController extends Controller
                         }
                     }
                 }
+            }
+        }
+
+        $rejected_movements = Movement::where('has_been_parsed', '=', false)->orderBy('created_at','desc')->cursor();
+        if(!is_null($rejected_movements)){
+            foreach ($rejected_movements as $rejected_movement){
+                $rejected_movement->has_been_parsed = true;
+                $rejected_movement->save();
             }
         }
 

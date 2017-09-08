@@ -116,9 +116,6 @@ class MainController extends Controller
 
             $contact = new Contact();
             $contact->name = 'George';
-            $contact->grade = 10.00;
-            $contact->cnp = '1940405100136';
-            $contact->phone = '0755823880';
             $contact->sex = 'M';
 
             $userAdmin->contact()->save($contact);
