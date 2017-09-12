@@ -2,10 +2,10 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\Controllers\DormsController;
 use Closure;
+use Illuminate\Support\Facades\Auth;
 
-class StartSorting
+class CheckHasTempPass
 {
     /**
      * Handle an incoming request.
@@ -16,10 +16,10 @@ class StartSorting
      */
     public function handle($request, Closure $next)
     {
+        $user = Auth::user();
+        if($user->has_temp_password){
+            return redirect()->route('change-password');
+        }
         return $next($request);
-    }
-    public function terminate($request, $response)
-    {
-        DormsController::beginSort();
     }
 }

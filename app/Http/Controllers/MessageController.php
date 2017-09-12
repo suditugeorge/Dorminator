@@ -96,6 +96,18 @@ class MessageController extends Controller
         $message->save();
     }
 
+    public static function sendMessageToAdmin($user_id, $text, $subject)
+    {
+        $admin = User::where('username', '=', 'root-dorminator')->first();
+
+        $message = new Message();
+        $message->to = intval($admin->id);
+        $message->from = intval($user_id);
+        $message->subject = $subject;
+        $message->message = $text;
+        $message->save();
+    }
+
 
     public function createTestMessage(Request $request)
     {

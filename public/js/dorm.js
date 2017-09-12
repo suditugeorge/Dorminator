@@ -59,11 +59,12 @@
           hideSpinner();
           return;
         } else {
-          toastr.success(json.message);
-          hideSpinner();
-          $('#send-dorm').addClass('hidden');
+          window.location.href = '/dorms';
         }
+      }).fail(function() {
+        return toastr.error('A intervenit o problemă care nu ține de noi');
       });
+      return;
     });
     return $('#pick-dorm').click(function(e) {
       var dorm, token;

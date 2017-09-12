@@ -58,7 +58,7 @@
             </div>
             <div class="ttl">
                 Username: {{trim($student->username)}}<br/>
-                Parolă: {{str_replace(' ','.',strtolower($student->contact()->get()[0]->name)).floatval($student->contact()->get()[0]->grade)}}
+                Parolă: {{$student->username}}
             </div>
         </div>
         @if($i != 0 && $i%68 == 0)

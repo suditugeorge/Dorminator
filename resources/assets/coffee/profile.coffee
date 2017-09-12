@@ -16,22 +16,25 @@ $('#change-user-profile').click (e) ->
 		$('#email').addClass('invalid')
 		formHasErrors = true
 	phoneRegex = /^[0-9]+$/
-	if !phoneRegex.test(phone)
+	if phone != "" and !phoneRegex.test(phone)
 		$('#phone').addClass('invalid')
 		formHasErrors = true
 	if formHasErrors
 		toastr.error("Unul sau mai multe câmpuri sunt goale sau conțin erori!")
 		return
-	$.post '/change-user-profile', {
+	$.post('/change-user-profile', {
 		_token: token, 
 		email: email,
 		sex: sex,
 		phone: phone
 		} , (json) ->
 		if !json.success
-			toastr.error("Unul sau mai multe câmpuri sunt goale sau conțin erori!")
+			toastr.error(json.message)
 			return
 		else
 			location.reload()
+		return
+	).fail ->
+		toastr.error('A intervenit o problemă care nu ține de noi')
 		return
 	return

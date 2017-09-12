@@ -13,6 +13,7 @@ use App\Message;
 use App\Contact;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\MessageController;
 
 class UserController extends Controller
 {
@@ -52,21 +53,28 @@ class UserController extends Controller
     public function updateProfile(Request $request)
     {
         try{
-            $validator = Validator::make(['email' => $request['email'], 'phone' => $request['phone']], ['email' => 'required|email|max:255|unique:users', 'phone' => 'required']);
-
-            if (!$validator->fails()) {
-                $user = Auth::user();
-                $user->email = $request['email'];
-                $user->contact->phone = $request['phone'];
-                $user->update();
-                $user->contact->update();
+            $user = User::where('email', '=', $request['email']);
+            if(!is_null($user)){
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Există deja un user cu această adresă de email',
+                ]);
             }
+            $user = Auth::user();
+            $user->email = $request['email'];
+            $user->contact->phone = $request['phone'];
+            $user->update();
+            $user->contact->update();
+
         }catch(\Exception $e){
+            $user = Auth::user();
+            MessageController::sendMessageToAdmin($user->id, $e, 'EROARE');
             return response()->json([
                 'success' => false,
                 'message' => 'A intervenit o problemă! Vă rugăm să ne contactați telefonic.',
             ]);               
         }
+
         return response()->json([
             'success' => true,
         ]); 
@@ -82,6 +90,7 @@ class UserController extends Controller
     public function addAdmins(Request $request)
     {
         try{
+            $user = Auth::user();
             $request->emails = preg_split('`\s`', $request->emails);
             foreach ($request->emails as $email) {
                 $result = self::createAdmin($email);
@@ -90,6 +99,8 @@ class UserController extends Controller
                         $m->from('i.tconsult99@gmail.com', 'Dorminator');
                         $m->to($email)->subject('Dorminator are nevoie de atenția ta!');
                     });
+                }elseif ($result['already_exist']){
+                    MessageController::sendMessageFromAdmin($user->id, 'Există de un admin cu adresa '. $email, 'EROARE INSERARE ADMIN');
                 }
             }
 
@@ -99,6 +110,8 @@ class UserController extends Controller
             ]);
 
         }catch(\Exception $e) {
+            $user = Auth::user();
+            MessageController::sendMessageToAdmin($user->id, $e, 'EROARE');
             return response()->json([
                 'success' => false,
                 'message' => 'A intervenit o problemă! Vă rugăm să ne contactați telefonic.',
@@ -159,11 +172,49 @@ class UserController extends Controller
         }elseif ($request->isMethod('post')){
             $user = Auth::user();
             $user->password = Hash::make($request->password);
+            $user->has_temp_password = false;
             $user->save();
             return response()->json([
                 'success' => true,
                 'url' => '/profile',
             ]);
+        }else{
+            abort(500, "Nu aveți dreptul pentru a accesa această pagină");
+        }
+
+    }
+
+    public function changeEmailTemplate(Request $request){
+        if ($request->isMethod('get')){
+            $user = Auth::user();
+            return view('change-email', ['user' => $user,]);
+        }elseif ($request->isMethod('post')){
+            try{
+
+                $user = User::where('email', '=', $request->email)->first();
+                if(!is_null($user)){
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Există deja un user cu această adresă de email',
+                    ]);
+                }
+
+                $user = Auth::user();
+                $user->email = $request->email;
+                $user->has_temp_email = false;
+                $user->save();
+                return response()->json([
+                    'success' => true,
+                    'url' => '/profile',
+                ]);
+            }catch(\Exception $e){
+                $user = Auth::user();
+                MessageController::sendMessageToAdmin($user->id, $e, 'EROARE');
+                return response()->json([
+                    'success' => false,
+                    'message' => 'A intervenit o problemă! Vă rugăm să ne contactați telefonic.',
+                ]);
+            }
         }else{
             abort(500, "Nu aveți dreptul pentru a accesa această pagină");
         }
@@ -215,48 +266,66 @@ class UserController extends Controller
             $students->withPath('/add-students');
             return view('students/add-student', ['user' => $user, 'can_insert' => $can_insert, 'students' => $students]);
         }elseif ($request->isMethod('post')){
-            $institution = Institution::where('code', '=', $request->code)->first();
+            try{
 
-            if(is_null($institution)){
+                $institution = Institution::where('code', '=', $request->code)->first();
+
+                if(is_null($institution)){
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Nu există nici o instituție cu codul furnizat.',
+                    ]);
+                }
+
+                $user = User::where('email', '=', $request->email)->first();
+                if(!is_null($user)){
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Există deja un user cu această adresă de email',
+                    ]);
+                }
+
+                $user = new User();
+                $user->username = str_replace(' ','.',strtolower($request->name));
+                $user->password = Hash::make($user->username);
+                $user->has_temp_password = true;
+                if (trim($request->email) == ''){
+                    $domain = '';
+                    $domain_names = explode(' ',$institution->name);
+                    foreach ($domain_names as $dom){
+                        $domain .= strtolower($dom);
+                    }
+                    $user->email = $user->username.'@'.$domain.'.com';
+                    $user->has_temp_email = true;
+                }else{
+                    $user->email = $request->email;
+                    $user->has_temp_email = false;
+                }
+                $user->is_admin = false;
+                $user->is_super_admin = false;
+                $user->save();
+
+                $contact = new Contact();
+                $contact->name = $request->name;
+                $contact->grade = floatval($request->grade);
+                $contact->cnp = $request->cnp;
+                $contact->phone = $request->phone;
+                $contact->sex = $request->sex;
+                $contact->institution_code = $institution->code;
+                $user->contact()->save($contact);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Studentul '. $contact->name . ' a fost adăugat în baza de date',
+                ]);
+            }catch(\Exception $e){
+                $user = Auth::user();
+                MessageController::sendMessageToAdmin($user->id, $e, 'EROARE');
                 return response()->json([
                     'success' => false,
-                    'message' => 'Nu există nici o instituție cu codul furnizat.',
+                    'message' => 'Am întâmpinat o problemă. Vă rugăm să ne contactați telefonic!',
                 ]);
             }
-
-            $user = new User();
-            $user->username = str_replace(' ','.',strtolower($request->name));
-            $user->password = Hash::make($user->username.floatval($request->grade));
-            $user->has_temp_password = true;
-            if (trim($request->email) == ''){
-                $domain = '';
-                $domain_names = explode(' ',$institution->name);
-                foreach ($domain_names as $dom){
-                    $domain .= strtolower($dom[0]);
-                }
-                $user->email = $user->username.'@'.$domain.'.com';
-                $user->has_temp_email = true;
-            }else{
-                $user->email = $request->email;
-                $user->has_tmp_email = false;
-            }
-            $user->is_admin = false;
-            $user->is_super_admin = false;
-            $user->save();
-
-            $contact = new Contact();
-            $contact->name = $request->name;
-            $contact->grade = floatval($request->grade);
-            $contact->cnp = $request->cnp;
-            $contact->phone = $request->phone;
-            $contact->sex = $request->sex;
-            $contact->institution_code = $institution->code;
-            $user->contact()->save($contact);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Studentul '. $contact->name . ' a fost adăugat în baza de date',
-            ]);
         }
 
     }

@@ -46,44 +46,59 @@ class StudentsController extends Controller
 
     public static function createStudent($student)
     {
+        try{
+            $institution = Institution::where('code', '=', $student->cod_falcultate)->first();
 
-        $institution = Institution::where('code', '=', $student->cod_falcultate)->first();
-
-        if(is_null($institution)){
-            return ['success' => false, 'message' => 'Nu există instituție cu codul '. $student->cod_falcultate];
-        }
-
-        $user = new User();
-        $base = str_replace(' ','.',strtolower($student->nume_prenume));
-        $user->username = $base.substr(strval(time()), -4);
-        $user->password = Hash::make($base.floatval($student->media_finala));
-        $user->has_temp_password = true;
-        if (trim($student->email) == ''){
-            $domain = '';
-            $domain_names = explode(' ',$institution->name);
-            foreach ($domain_names as $dom){
-                $domain .= strtolower($dom[0]);
+            if(is_null($institution)){
+                return ['success' => false, 'message' => 'Nu există instituție cu codul '. $student->cod_falcultate];
             }
-            $user->email = $user->username.'@'.$domain.'.com';
-            $user->has_temp_email = true;
-        }else{
-            $user->email = $student->email;
-            $user->has_tmp_email = false;
+
+            if(trim($student->email) != ''){
+                $user = User::where('email', '=', $student->email);
+                if(!is_null($user)){
+                    return ['success' => false, 'message' => 'Există deja studentul cu adresă '.$student->email];
+                }
+            }
+
+            $user = new User();
+            $base = preg_replace('/[^a-z\d ]+/i', '', strtolower($student->nume_prenume));
+            $base = preg_replace('/\s+/', ' ',$base);
+            $base = str_replace(' ','.',$base);
+            $user->username = $base.substr(strval(time()), -4);
+            $user->password = Hash::make($user->username);
+            $user->has_temp_password = true;
+            if (trim($student->email) == ''){
+                $domain = '';
+                $domain_names = explode(' ',$institution->name);
+                foreach ($domain_names as $dom){
+                    $domain .= strtolower($dom);
+                }
+                $user->email = $user->username.'@'.$domain.'.com';
+                $user->has_temp_email = true;
+            }else{
+                $user->email = $student->email;
+                $user->has_temp_email = false;
+            }
+            $user->is_admin = false;
+            $user->is_super_admin = false;
+            $user->save();
+
+            $contact = new Contact();
+            $contact->name = $student->nume_prenume;
+            $contact->grade = floatval($student->media_finala);
+            $contact->cnp = $student->cnp;
+            $contact->phone = $student->telefon;
+            $contact->sex = $student->sex;
+            $contact->institution_code = $institution->code;
+            $user->contact()->save($contact);
+
+            return ['success' => true];
+
+        }catch(\Exception $e) {
+            $user = Auth::user();
+            MessageController::sendMessageToAdmin($user->id, $e, 'EROARE');
+            return ['success' => false, 'message' => 'Am întâmpinat o eroare la procesarea unui student. A fost trimis un mesaj catre admin pentru rezolvarea problemei'];
         }
-        $user->is_admin = false;
-        $user->is_super_admin = false;
-        $user->save();
-
-        $contact = new Contact();
-        $contact->name = $student->nume_prenume;
-        $contact->grade = floatval($student->media_finala);
-        $contact->cnp = $student->cnp;
-        $contact->phone = $student->telefon;
-        $contact->sex = $student->sex;
-        $contact->institution_code = $institution->code;
-        $user->contact()->save($contact);
-
-        return ['success' => true];
 
     }
 

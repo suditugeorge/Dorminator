@@ -23,5 +23,6 @@ elixir(mix => {
     	.coffee("main.coffee")
 	 	.coffee("profile.coffee")
     	.coffee("change-password.coffee")
+    	.coffee("change-email.coffee")
 	 	.coffee("users-admin.coffee");
 });

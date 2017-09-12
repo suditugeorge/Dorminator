@@ -18,8 +18,10 @@
                 <li>
                     <ul class="collapsible collapsible-accordion">
                         <li><a href="/profile" class="collapsible-header waves-effect arrow-r"><i class="fa fa-user"></i> Profil</a></li>
-                        @if(Auth::check() && ($user->is_admin || $user->is_super_admin))
+                        @if(Auth::check() && $user->is_super_admin)
                             <li><a href="/users" class="collapsible-header waves-effect arrow-r"><i class="fa fa-users"></i> Adaugă admini</a></li>
+                        @endif
+                        @if(Auth::check() && ($user->is_admin || $user->is_super_admin))
                             <li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-lock"></i> Admin<i class="fa fa-angle-down rotate-icon"></i></a>
                                 <div class="collapsible-body">
                                     <ul>

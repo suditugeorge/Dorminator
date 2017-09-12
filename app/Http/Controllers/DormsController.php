@@ -29,24 +29,33 @@ class DormsController extends Controller
             }
             return view('dorms/dorms-template', ['user' => $user, 'dorms' => $dorms, 'can_insert' => $can_insert]);
         } elseif ($request->isMethod('post')) {
-            $dorm = Dorm::where('code', '=', $request->code)->first();
-            if (!is_null($dorm)) {
+            try{
+                $dorm = Dorm::where('code', '=', $request->code)->first();
+                if (!is_null($dorm)) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Aceast cămin există deja.',
+                    ]);
+                }
+
+                $dorm = new Dorm();
+                $dorm->name = $request->name;
+                $dorm->code = $request->code;
+                $dorm->description = $request->description;
+
+                $dorm->save();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'A fost introdus căminul ' . $dorm->name,
+                ]);
+            }catch(\Exception $e) {
+                $user = Auth::user();
+                MessageController::sendMessageToAdmin($user->id, $e, 'EROARE');
                 return response()->json([
                     'success' => false,
-                    'message' => 'Aceast cămin există deja',
+                    'message' => 'Am întâmpinat o problemă. Vă rugăm să ne contactați telefonic!',
                 ]);
             }
-
-            $dorm = new Dorm();
-            $dorm->name = $request->name;
-            $dorm->code = $request->code;
-            $dorm->description = $request->description;
-
-            $dorm->save();
-            return response()->json([
-                'success' => true,
-                'message' => 'A fost introdus căminul ' . $dorm->name,
-            ]);
         }
     }
 

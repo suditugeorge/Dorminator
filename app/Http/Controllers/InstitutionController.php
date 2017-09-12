@@ -15,24 +15,36 @@ class InstitutionController extends Controller
             $institutions = Institution::orderBy('created_at', 'desc')->paginate(20);
             return view('institutions/add-institution', ['user' => $user, 'institutions' => $institutions]);
         } elseif ($request->isMethod('post')) {
-            $institution = Institution::where('code', '=', $request->code)->first();
-            if (!is_null($institution)) {
+            try {
+
+                $institution = Institution::where('code', '=', $request->code)->first();
+                if (!is_null($institution)) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Această instituție există deja',
+                    ]);
+                }
+
+                $institution = new Institution();
+                $institution->name = $request->name;
+                $institution->code = $request->code;
+                $institution->description = $request->description;
+
+                $institution->save();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'A fost introdusă instituția ' . $institution->name,
+                ]);
+            }catch(\Exception $e) {
+                $user = Auth::user();
+                MessageController::sendMessageToAdmin($user->id, $e, 'EROARE');
                 return response()->json([
                     'success' => false,
-                    'message' => 'Această instituție există deja',
+                    'message' => 'Am întâmpinat o eroare. Vă rugăm să ne contactați telefonic',
                 ]);
+
             }
 
-            $institution = new Institution();
-            $institution->name = $request->name;
-            $institution->code = $request->code;
-            $institution->description = $request->description;
-
-            $institution->save();
-            return response()->json([
-                'success' => true,
-                'message' => 'A fost introdusă instituția ' . $institution->name,
-            ]);
         }
 
     }

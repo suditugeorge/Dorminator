@@ -18,7 +18,7 @@
       formHasErrors = true;
     }
     phoneRegex = /^[0-9]+$/;
-    if (!phoneRegex.test(phone)) {
+    if (phone !== "" && !phoneRegex.test(phone)) {
       $('#phone').addClass('invalid');
       formHasErrors = true;
     }
@@ -33,11 +33,13 @@
       phone: phone
     }, function(json) {
       if (!json.success) {
-        toastr.error("Unul sau mai multe câmpuri sunt goale sau conțin erori!");
+        toastr.error(json.message);
         return;
       } else {
         location.reload();
       }
+    }).fail(function() {
+      toastr.error('A intervenit o problemă care nu ține de noi');
     });
   });
 

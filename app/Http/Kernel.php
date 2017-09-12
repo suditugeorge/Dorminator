@@ -59,5 +59,7 @@ class Kernel extends HttpKernel
         'isLogedIn' => \App\Http\Middleware\ChecIfLogedIn::class,
         'isAdmin' => \App\Http\Middleware\IsAdmin::class,
         'isSuperAdmin' => \App\Http\Middleware\isSuperAdmin::class,
+        'CheckHasTempPass' => \App\Http\Middleware\CheckHasTempPass::class,
+        'CheckHasTempEmail' => \App\Http\Middleware\CheckHasTempEmail::class,
     ];
 }

@@ -40,15 +40,16 @@ $ ->
       hideSpinner()
       return
 
-    $.post '/dorms', {_token: token, name: name, code: code, description: description}, (json) ->
+    $.post( '/dorms', {_token: token, name: name, code: code, description: description}, (json) ->
       if !json.success
         toastr.error(json.message)
         hideSpinner()
         return
       else
-        toastr.success(json.message)
-        hideSpinner()
-        $('#send-dorm').addClass('hidden')
+        window.location.href = '/dorms'
+      return
+    ).fail ->
+        toastr.error('A intervenit o problemă care nu ține de noi')
       return
     return
 
