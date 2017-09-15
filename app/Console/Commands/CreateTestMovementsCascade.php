@@ -2,26 +2,26 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Controllers\DormsController;
 use Illuminate\Console\Command;
+use App\Http\Controllers\DormsController;
 use App\User;
 use App\Movement;
 
-class CreateTestMovements extends Command
+class CreateTestMovementsCascade extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'dorminator:createTestMovementsPreference';
+    protected $signature = 'dorminator:createTestMovementsCascade';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Grands all the students a random room';
+    protected $description = 'Command description';
 
     /**
      * Create a new command instance.
@@ -41,18 +41,16 @@ class CreateTestMovements extends Command
     public function handle()
     {
         $avaible_dorms = DormsController::getAvailableDorms();
-
         $users_number = User::where('is_admin', '=', false)->where('is_super_admin', '=', false)->count();
-
         $bar = $this->output->createProgressBar($users_number);
-
         $users = User::where('is_admin', '=', false)->where('is_super_admin', '=', false)->cursor();
+
         foreach ($users as $user){
             $movement = new Movement();
             $movement->user_id = $user->id;
             $movement->institution_code = $user->contact->institution_code;
-            $random_key = array_rand($avaible_dorms, 1);
-            $movement->dorm_code = $avaible_dorms[$random_key];
+            shuffle($avaible_dorms);
+            $movement->dorm_code = implode(',', $avaible_dorms);
             $movement->acceptance = false;
             $movement->has_been_parsed = false;
             $movement->sex = $user->contact->sex;

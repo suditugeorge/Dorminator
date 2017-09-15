@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Dbstat;
 use App\Http\Controllers\DormsController;
 use Closure;
 

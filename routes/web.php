@@ -114,6 +114,10 @@ Route::group(['middleware' => 'isLogedIn'], function () {
                     'uses' => 'DormsController@uploadRoomsFile',
                 ]);
 
+                Route::get('/allocated-dorms', [
+                    'uses' => 'DormsController@allocatedDorms',
+                ]);
+
                 Route::get('/download-student-template', [
                     'uses' => 'UserController@downloadStudentTemplate',
                 ]);
@@ -128,6 +132,13 @@ Route::group(['middleware' => 'isLogedIn'], function () {
 
                 Route::post('/stop-dorminator', [
                     'uses' => 'DormsController@stopDorminator',
+                ]);
+                Route::post('/start-dorminator', [
+                    'uses' => 'DormsController@startDorminator',
+                ]);
+
+                Route::post('/algorithm/{algorithm_type}', [
+                    'uses' => 'DormsController@selectAlgorithm',
                 ]);
 
             });

@@ -18,6 +18,7 @@ class CreateDbstatsTable extends Migration
             $table->boolean('start')->default(false);
             $table->boolean('end')->default(false);
             $table->boolean('can_operate')->default(true);
+            $table->string('algorithm')->default('preference');
             $table->timestamps();
         });
     }

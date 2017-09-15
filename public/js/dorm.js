@@ -66,7 +66,7 @@
       });
       return;
     });
-    return $('#pick-dorm').click(function(e) {
+    $('#pick-dorm').click(function(e) {
       var dorm, token;
       e.preventDefault();
       showSpinnerNormal();
@@ -75,6 +75,34 @@
       $.post('/select-dorm', {
         _token: token,
         dorm: dorm
+      }, function(json) {
+        if (!json.success) {
+          toastr.error(json.message);
+          hideSpinnerNormal();
+          return;
+        } else {
+          window.location.href = '/select-dorm';
+        }
+      });
+    });
+    return $('#pick-multiple-dorms').click(function(e) {
+      var codes, codes_copy, no_duplicates_codes, token;
+      e.preventDefault();
+      codes = [];
+      $('.dorm-select').each(function() {
+        var val;
+        val = $(this).val();
+        if (val !== "") {
+          codes.push(val);
+        }
+      });
+      codes_copy = codes;
+      no_duplicates_codes = jQuery.unique(codes);
+      showSpinnerNormal();
+      token = $('[name="_token"]').val();
+      $.post('/select-dorm', {
+        _token: token,
+        dorm: no_duplicates_codes.join(',')
       }, function(json) {
         if (!json.success) {
           toastr.error(json.message);

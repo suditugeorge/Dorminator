@@ -30,29 +30,39 @@
 @section('content')
     @include('dashboard.navigation')
     <main class="">
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs nav-justified" style="background-color: #222;">
-            <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#panel3" role="tab">Cămine</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#panel1" role="tab">Selectează cămin</a>
-            </li>
+        @if(!$db_stat->start)
+            <div class="alert alert-info">
+                <p><strong>Atenție!</strong> Aplicația nu este încă gata să accepte cereri. Vă rugăm să accesați aplicația cât mai des, pentru a vedea dacă s-au produs modificări.</p>
+            </div>
+        @else
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs nav-justified" style="background-color: #222;">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#panel3" role="tab">Cămine</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#panel1" role="tab">Selectează cămin</a>
+                </li>
 
-        </ul>
-        <!-- Tab panels -->
-        <div class="tab-content card">
-            <div class="tab-pane fade in show active" id="panel3" role="tabpanel">
-                <br>
-                @include('dorms.dorms-list')
+            </ul>
+            <!-- Tab panels -->
+            <div class="tab-content card">
+                <div class="tab-pane fade in show active" id="panel3" role="tabpanel">
+                    <br>
+                    @include('dorms.dorms-list')
+                </div>
+                <!--Panel 1-->
+                <div class="tab-pane fade" id="panel1" role="tabpanel">
+                    <br/>
+                    @if($db_stat->algorithm == 'preference')
+                        @include('dorms.select-single-dorm')
+                    @elseif($db_stat->algorithm == 'cascade')
+                        @include('dorms.select-multiple-dorms')
+                    @endif
+                </div>
+                <!--/.Panel 1-->
             </div>
-            <!--Panel 1-->
-            <div class="tab-pane fade" id="panel1" role="tabpanel">
-                <br/>
-                @include('dorms.select-single-dorm')
-            </div>
-            <!--/.Panel 1-->
-        </div>
+        @endif
 
     </main>
 

@@ -31,8 +31,18 @@
                                     </ul>
                                 </div>
                             </li>
+                            <li><a class="collapsible-header waves-effect arrow-r"><i class="fa fa-align-justify"></i> Algoritmi cazare<i class="fa fa-angle-down rotate-icon"></i></a>
+                                <div class="collapsible-body">
+                                    <ul>
+                                        <li><a href="#" class="waves-effect" id="algorithm-preference"><i class="fa fa-align-left" ></i>Algoritm preferențial</a></li>
+                                        <li><a href="#" class="waves-effect" id="algorithm-cascade"><i class="fa fa-align-left"></i>Algoritm cascadă</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                            <li><a href="#" class="collapsible-header waves-effect arrow-r green-text" id="start-dorminator"><i class="fa fa-play"></i> Pornește cazarea</a>
                             <li><a href="#" class="collapsible-header waves-effect arrow-r" id="start-sort"><i class="fa fa-database"></i> Pornește sortarea</a>
                             <li><a href="#" class="collapsible-header waves-effect arrow-r red-text" id="stop-dorminator"><i class="fa fa-ban"></i> Oprește cazarea</a>
+                            <li><a href="/allocated-dorms" class="collapsible-header waves-effect arrow-r"><i class="fa fa-download"></i> Download listă finală</a>
                         @endif
                         @if(Auth::check() && !$user->is_admin && !$user->is_super_admin)
                             <li><a href="/select-dorm" class="collapsible-header waves-effect arrow-r"><i class="fa fa-building"></i> Cămine</a></li>

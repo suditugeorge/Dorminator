@@ -15,6 +15,9 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\CreateTestMovements::class,
         Commands\SortStudents::class,
+        Commands\AddTestingInfo::class,
+        Commands\CreateTestMovementsCascade::class,
+        Commands\SortStudentsCascade::class,
     ];
 
     /**
